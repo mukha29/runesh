@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday My Love ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+
+body{
+  background:linear-gradient(180deg,#100008,#040002);
+  color:#e8ccd8;
+  overflow:hidden;
+}
+
+/* ---------- COMMON ---------- */
+.page{
+  position:fixed;
+  inset:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  padding:24px;
+}
+.page.active{display:flex}
+
+.btn{
+  margin-top:26px;
+  padding:12px 36px;
+  border-radius:40px;
+  background:#6b1f36;
+  color:#f2d9e4;
+  font-size:17px;
+  cursor:pointer;
+  box-shadow:0 0 18px rgba(107,31,54,.7);
+}
+
+/* ---------- PAGE 1 ---------- */
+#p1 h1{
+  font-size:40px;
+  color:#c995ad;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{50%{transform:scale(1.08)}}
+
+#quote{
+  margin-top:18px;
+  font-size:20px;
+  line-height:1.8;
+  max-width:720px;
+  color:#d7b4c3;
+}
+
+/* floating hearts */
+.heart{
+  position:absolute;
+  bottom:-30px;
+  font-size:18px;
+  color:#7a2a44;
+  animation:floatUp 10s linear infinite;
+  opacity:.6;
+}
+@keyframes floatUp{
+  to{transform:translateY(-120vh);opacity:0}
+}
+
+/* ---------- PAGE 2 : CAKE ---------- */
+.cake-wrapper{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
+}
+
+#cake{
+  width:220px;
+  height:140px;
+  background:linear-gradient(#7a2a44,#4a1628);
+  border-radius:0 0 30px 30px;
+  position:relative;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
+}
+
+.candle{
+  width:14px;
+  height:50px;
+  background:#f6eef2;
+  position:absolute;
+  top:-50px;
+  left:50%;
+  transform:translateX(-50%);
+}
+.flame{
+  width:18px;
+  height:18px;
+  background:radial-gradient(circle,#ffd08a,#ff8c00);
+  border-radius:50%;
+  position:absolute;
+  top:-18px;
+  left:-2px;
+  animation:flicker .35s infinite;
+}
+@keyframes flicker{50%{transform:scale(1.4)}}
+
+#wish{
+  font-size:18px;
+  line-height:1.8;
+  max-width:720px;
+  white-space:pre-line;
+}
+
+.photos{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.photos img{
+  width:120px;
+  height:160px;
+  object-fit:cover;
+  border-radius:14px;
+  box-shadow:0 0 16px rgba(120,40,70,.6);
+  opacity:0;
+  transform:translateY(16px);
+  transition:1.2s ease;
+}
+.photos img.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ---------- PAGE 3 ---------- */
+#passage{
+  font-size:22px;
+  line-height:2;
+  max-width:820px;
+  color:#d7b4c3;
+}
+
+/* ---------- PAGE 4 ---------- */
+.quiz p{font-size:22px;margin-bottom:20px}
+.quiz button{
+  margin:10px;
+  padding:10px 26px;
+  border-radius:30px;
+  border:none;
+  background:#6b1f36;
+  color:#f2d9e4;
+  cursor:pointer;
+}
+
+/* ---------- PAGE 5 : FIREWORKS ---------- */
+#p5{
+  background:#000;
+}
+#p5 h1{
+  font-size:42px;
+  color:#f4c2d7;
+  text-shadow:0 0 20px rgba(244,194,215,.8);
+  z-index:3;
+}
+#p5 p{
+  margin-top:10px;
+  font-size:22px;
+  color:#ffdbe8;
+  z-index:3;
+}
+canvas{
+  position:absolute;
+  inset:0;
+  z-index:1;
+}
+
+/* ---------- MOBILE ---------- */
+@media(max-width:768px){
+  #passage{font-size:18px}
+  .photos img{width:90px;height:120px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC -->
+<audio id="music" loop>
+  <source src="pavii.mp4.mp3" type="audio/mp3">
+</audio>
+
+<!-- PAGE 1 -->
+<div class="page active" id="p1">
+  <h1>Tap to Start ❤️</h1>
+  <div id="quote"></div>
+  <div class="btn" onclick="start()">Begin</div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="p2">
+  <div class="cake-wrapper">
+    <h2>Make a Wish 🎂</h2>
+    <p>Tap the candle gently</p>
+
+    <div id="cake">
+      <div class="candle"><div class="flame" id="flame"></div></div>
+    </div>
+
+    <div id="wish"></div>
+
+    <div class="photos">
+      <img src="pavi1.jpg">
+      <img src="pavi2.jpg">
+      <img src="pavi3.jpg">
+      <img src="pavi4.jpg">
+      <img src="pavi5.jpg">
+    </div>
+
+    <div class="btn" id="cakeNext" style="display:none" onclick="next(3)">Next</div>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="p3">
+  <div id="passage"></div>
+  <div class="btn" onclick="next(4)">Continue</div>
+</div>
+
+<!-- PAGE 4 : QUIZ -->
+<div class="page" id="p4">
+  <div class="quiz" id="quiz"></div>
+</div>
+
+<!-- PAGE 5 : FINAL -->
+<div class="page" id="p5">
+  <canvas id="fireworks"></canvas>
+  <h1>🎉 HAPPY BIRTHDAY MY LOVE 🎉</h1>
+  <p>I Love You ❤️🥹✨</p>
+</div>
+
+<script>
+/* ---------- PAGE SWITCH ---------- */
+function next(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p'+n).classList.add('active');
+  if(n===5) startFireworks();
+}
+
+/* ---------- TYPING ---------- */
+function type(el,text,speed=60){
+  let i=0; el.textContent="";
+  const t=setInterval(()=>{
+    el.textContent+=text[i++];
+    if(i>=text.length) clearInterval(t);
+  },speed);
+}
+
+/* ---------- START ---------- */
+function start(){
+  document.getElementById("music").play();
+  next(2);
+}
+
+/* page 1 quote */
+type(
+  document.getElementById("quote"),
+  "Love isn’t loud.\nIt’s deep, quiet, and forever."
+);
+
+/* hearts */
+for(let i=0;i<14;i++){
+  const h=document.createElement("div");
+  h.className="heart";
+  h.textContent="❤";
+  h.style.left=Math.random()*100+"%";
+  h.style.animationDelay=Math.random()*8+"s";
+  document.body.appendChild(h);
+}
+
+/* cake */
+document.getElementById("cake").onclick=()=>{
+  document.getElementById("flame").style.display="none";
+
+  type(document.getElementById("wish"),
+`Hey Azhagii 💞
+Happy birthday mah 🎈
+You are the softest part of my heart 🍀
+The sweetest chapter in my story 💕
+I Know you are worth wifeyy for mee ❤️
+Sending good vibes and maybe my love 😏
+Hope u have a great day today ❤️😘`
+  );
+
+  document.querySelectorAll(".photos img")
+    .forEach((img,i)=>setTimeout(()=>img.classList.add("show"),i*300));
+
+  document.getElementById("cakeNext").style.display="block";
+};
+
+/* page 3 */
+document.getElementById("p3").addEventListener("click",()=>{
+  type(
+    document.getElementById("passage"),
+    "You are my calm, my care, my safe place.\nWith you, love feels gentle and real.\nI promise respect, honesty, and a heart that always chooses you."
+  );
+},{once:true});
+
+/* ---------- QUIZ (UPDATED) ---------- */
+const questions=[
+ "Will you always choose me?",
+ "Can I love you every single day?",
+ "Will you marry me? 💍"
+];
+let q=0;
+function loadQ(){
+  document.getElementById("quiz").innerHTML=
+    `<p>${questions[q]}</p>
+     <button onclick="yes()">Yes ❤️</button>
+     <button onclick="no()">No</button>`;
+}
+function yes(){ q<questions.length-1 ? (q++,loadQ()) : next(5); }
+function no(){ alert("No is not an option here ❤️"); }
+loadQ();
+
+/* ---------- REAL FIREWORKS ---------- */
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+resize(); window.onresize=resize;
+
+let particles=[];
+function launch(){
+  const x=Math.random()*canvas.width;
+  const y=Math.random()*canvas.height*0.5;
+  const colors=["#ff4d6d","#ffd166","#06d6a0","#4cc9f0","#c77dff"];
+  for(let i=0;i<100;i++){
+    particles.push({
+      x,y,
+      vx:Math.cos(Math.random()*Math.PI*2)*(Math.random()*4+2),
+      vy:Math.sin(Math.random()*Math.PI*2)*(Math.random()*4+2),
+      life:80,
+      color:colors[Math.floor(Math.random()*colors.length)]
+    });
+  }
+}
+function animate(){
+  ctx.fillStyle="rgba(0,0,0,0.25)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  particles.forEach((p,i)=>{
+    p.x+=p.vx; p.y+=p.vy; p.life--;
+    ctx.fillStyle=p.color;
+    ctx.fillRect(p.x,p.y,3,3);
+    if(p.life<=0) particles.splice(i,1);
+  });
+  requestAnimationFrame(animate);
+}
+function startFireworks(){
+  setInterval(launch,700);
+  animate();
+}
+</script>
+
+</body>
+</html>
